@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id               String    @id @default(uuid())
+  email            String    @unique
+  name             String
+  password         String
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  SESION_TOKEN     String?   @unique
+  role             Role      @default(USER)
+  profileImagePath String?
+  profileImageURL  String?
+  cart             cart?
+  orders           order[]
+  products         product[]
+}
+
+model category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  product[]
+}
+
+model cart {
+  id     String     @id @default(uuid())
+  userId String     @unique
+  user   user       @relation(fields: [userId], references: [id])
+  items  cartItem[]
+}
+
+model cartItem {
+  id        String  @id @default(uuid())
+  cartId    String
+  productId String
+  quantity  Int
+  cart      cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product   product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, cartId])
+}
+
+model product {
+  id               String     @id @default(uuid())
+  tokoId           String
+  name             String
+  description      String?
+  price            Decimal    @default(0)
+  stock            Int        @default(0)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  categoryId       String
+  status           status     @default(ON)
+  productImagePath String?  
+  productImageURL  String?
+  cartItem         cartItem[]
+  orders           order[]
+  category         category   @relation(fields: [categoryId], references: [id])
+  toko             user       @relation(fields: [tokoId], references: [id])
+}
+
+model order {
+  id            String      @id @default(uuid())
+  userId        String
+  productId     String
+  quantity      Int
+  tanggal_order DateTime    @default(now())
+  status        OrderStatus @default(PENDING)
+  payment       String
+  total_price   Int
+  product       product     @relation(fields: [productId], references: [id])
+  user          user        @relation(fields: [userId], references: [id])
+}
+
+enum status {
+  ON
+  OFF
+  STOCK_HABIS
+}
+
+enum Role {
+  USER
+  ADMIN
+  TOKO
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
