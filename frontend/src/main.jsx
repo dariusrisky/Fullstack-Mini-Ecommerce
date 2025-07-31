@@ -9,14 +9,16 @@ import {
 } from "react-router-dom";
 import DefaultPage from "./page/defaultPage.jsx";
 import App from "./App.jsx";
+import ProductPage from "./page/ProductPage.jsx";
 import "./index.css";
-import RegisterPage from "./page/RegisterPage.jsx";
+import ProfilePage from "./page/ProfilePage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route path="/" element={<DefaultPage />} />
-      <Route path="/test" element={<RegisterPage />} />
+      <Route path="/buy/product/:productid" element={<ProductPage />} />
+      <Route path="/user/profile" element={<ProfilePage />} />
     </Route>
   )
 );

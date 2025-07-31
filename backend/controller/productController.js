@@ -2,8 +2,6 @@ const { status } = require("@prisma/client");
 const path = require("path");
 const fs = require("fs");
 const { prisma } = require("./utils/prismaClient");
-const { get } = require("http");
-const { log } = require("console");
 
 const createProduct = (req, res) => {
   const { name, price, description, stock, categoriId } = req.body;
@@ -246,6 +244,28 @@ const getProductbyID = async (req, res) => {
   try {
     const product = await prisma.product.findUnique({
       where: { id: params, status: status.ON },
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        stock: true,
+        description: true,
+        productImageURL: true,
+        productImagePath: true,
+        category: {
+          select: {
+            name: true,
+          },
+        },
+        toko: {
+          select: {
+            id: true,
+            name: true,
+            profileImagePath: true,
+            profileImageURL: true,
+          },
+        },
+      },
     });
 
     return res.status(200).json({

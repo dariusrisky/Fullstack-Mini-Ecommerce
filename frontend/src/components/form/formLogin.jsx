@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import axios, { setAuthToken } from "../../lib/axios";
+import React, { useState, useEffect } from "react";
+import axios, { setAccessToken } from "../../lib/axios";
 
 export default function FormLogin({ renderForm }) {
   const [Loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [token, setToken] = useState("");
   const [success, setSuccess] = useState("");
   const [formData, setFormData] = useState({
     email: "",
@@ -18,20 +19,16 @@ export default function FormLogin({ renderForm }) {
     });
   };
 
-  const handleRegister = async e => {
+  const handleLogin = async e => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
     setLoading(true);
 
-    const fullname = `${formData.firstname} ${formData.lastname}`;
-
     const payload = {
-      name: formData.username,
       email: formData.email,
       password: formData.password,
-      password_confirm: formData.confirmPassword,
     };
 
     try {
@@ -39,11 +36,10 @@ export default function FormLogin({ renderForm }) {
         withCredentials: true,
       });
 
-      setAuthToken(response.data.user.accessToken);
-
       console.log("Respon dari server:", response.data.user.accessToken);
+      setAccessToken(response.data.user.accessToken);
       setSuccess("login berhasil!");
-      // window.location.href = "/";
+      window.location.href = "/";
     } catch (err) {
       console.error("Error saat registrasi:", err);
       if (err.response && err.response.data && err.response.data.msg) {
@@ -76,7 +72,7 @@ export default function FormLogin({ renderForm }) {
           SIGN IN
         </h2>
 
-        <form onSubmit={handleRegister} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label
               className="block text-sm font-medium text-gray-700 my-3"

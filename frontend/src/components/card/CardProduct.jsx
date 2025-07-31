@@ -1,14 +1,16 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import formaterPrice from "../../lib/formaterPrice";
 
 export default function CardProduct({ item }) {
-
-  const formatted = new Intl.NumberFormat("id-ID").format(item.price);
+  const formatted = formaterPrice(item.price);
 
   return (
     <>
-      <div
+      <Link
         key={item.id}
         className=" rounded-lg overflow-hidden shadow-lg bg-white "
+        to={`/buy/product/${item.id}?c=${item.category}&n=${item.name}`}
       >
         <img
           className="w-full h-48 object-fill"
@@ -38,7 +40,7 @@ export default function CardProduct({ item }) {
             </span>
           </div>
         </div>
-      </div>
+      </Link>
     </>
   );
 }

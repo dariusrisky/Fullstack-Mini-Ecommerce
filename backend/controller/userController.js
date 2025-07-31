@@ -8,6 +8,13 @@ const { generateAccessToken, generateRefreshToken } = require("./utils/jwt");
 const defaultProfile =
   "http://localhost:3000/image/default/default_profile.jpeg";
 
+const getUser = async (req, res) => {
+  const user = await prisma.user.findUnique({
+    where: { id: req.user.id },
+  });
+  res.status(200).json({ user: user, role : user.role });
+};
+
 const registerAccount = async (req, res) => {
   const { email, name, password, password_confirm, role } = req.body;
   if (!email || !name || !password || !password_confirm) {
@@ -88,8 +95,8 @@ const loginAccount = async (req, res) => {
     });
 
     res.cookie("refreshToken", refreshToken, {
-      // httpOnly: true,
-      secure: true,
+    httpOnly: true,
+    secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -104,6 +111,7 @@ const loginAccount = async (req, res) => {
         image: user.profileImagePath,
         url: user.profileImageURL,
         accessToken: accessToken,
+        refreshToken: refreshToken,
       },
     });
   } catch (error) {
@@ -120,12 +128,11 @@ const logoutAccount = async (req, res) => {
     if (!cookie) return res.sendStatus(401);
     if (!refreshToken) return res.sendStatus(402);
     const user = await prisma.user.findUnique({
-      where: { SESION_TOKEN: refreshToken },
+      where: { SESION_TOKEN: refreshToken || req.body.refreshToken },
     });
 
     if (!user) {
       res.clearCookie("refreshToken", {
-        httpOnly: true,
         secure: true,
       });
       return res.sendStatus(207);
@@ -226,4 +233,5 @@ module.exports = {
   logoutAccount,
   editProfileUser,
   getNewAccessToken,
+  getUser,
 };
