@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
 
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: `${process.env.FRONTEND_URL}`,
   credentials: true,
 };
 
@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
