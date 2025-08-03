@@ -15,6 +15,7 @@
   },
   "scripts": {
     "test": "jest",
+    "postinstall": "prisma generate",
     "dev": "nodemon index.js",
     "start" : "node index.js",
     "build": "prisma generate && node index.js "
