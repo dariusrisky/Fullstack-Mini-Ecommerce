@@ -25,3 +25,5 @@ app.listen(PORT, () => {
 const apiRoutes = require("./routes/apiRoutes");
 
 app.use("/api/v1", apiRoutes);
+
+export default app;
