@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}`,
+  baseURL: `${process.env.VITE_API_URL}/api/v1/user`,
   headers: {
     "Content-Type": "application/json",
   },
