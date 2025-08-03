@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../lib/axios";
 import formaterPrice from "../lib/formaterPrice";
-import OtherProduct from "../components/OtherProduct";
-import CheckoutOrder from "../components/CheckoutOrder";
+import OtherProduct from "../components/otherProduct";
+import NavbarComponent from "../components/NavbarComponent";
 
 function ProductPage() {
   const [products, setProducts] = useState([]);
