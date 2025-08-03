@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "../lib/axios";
 import formaterPrice from "../lib/formaterPrice";
-import OtherProduct from "../components/otherProduct";
+import OtherProduct from "../components/OtherProduct";
 import CheckoutOrder from "../components/CheckoutOrder";
 
 function ProductPage() {
