@@ -7,7 +7,7 @@ import {
   Route,
   Link,
 } from "react-router-dom";
-import DefaultPage from "./page/defaultPage.jsx";
+import DefaultPage from "./page/DefaultPage.jsx";
 import App from "./App.jsx";
 import ProductPage from "./page/ProductPage.jsx";
 import "./index.css";
