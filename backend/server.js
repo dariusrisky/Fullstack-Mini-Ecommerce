@@ -22,6 +22,10 @@ app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
+app.get("/", (req, res) => {
+  res.json("Hello World!");
+});
+
 const apiRoutes = require("./routes/apiRoutes");
 
 app.use("/api/v1", apiRoutes);
