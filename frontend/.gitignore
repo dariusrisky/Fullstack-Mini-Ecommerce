@@ -25,4 +25,8 @@ dist-ssr
 /src/page/.txt
 # refactoring
 /src/features
+<<<<<<< HEAD
 .env
+=======
+/src/components/InformationProfile.jsx
+>>>>>>> parent of ff344d5 (resolve error vercel)
