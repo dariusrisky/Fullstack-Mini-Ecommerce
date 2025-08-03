@@ -1,4 +1,5 @@
 const { PrismaClient, Prisma } = require("@prisma/client");
-const prisma = new PrismaClient();
+const { withAccelerate } = require('@prisma/extension-accelerate')
+const prisma = new PrismaClient().$extends(withAccelerate());
 
 module.exports = { prisma, Prisma };
