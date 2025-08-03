@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
 
 const corsOptions = {
-  origin: "http://localhost:5173", // Ganti dengan URL frontend Anda
+  origin: "http://localhost:5173",
   credentials: true,
 };
 
@@ -15,6 +15,7 @@ app.use(express.json());
 app.use(fileUpload());
 app.use(cookieParser());
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

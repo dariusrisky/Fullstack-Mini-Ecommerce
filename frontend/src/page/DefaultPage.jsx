@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import NavbarComponent from "../components/NavbarComponent";
 import Reminder from "../components/Reminder";
 import FormRegister from "../components/form/formRegister";
 import ItemProduct from "../components/ItemProduct";
@@ -11,6 +10,10 @@ function DefaultPage() {
   const [showRegister, setShowRegister] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showReminder, setShowReminder] = useState(true);
+  
+  useEffect(() => {
+    if (sessionStorage.getItem("isLogin")) setShowReminder(false);
+  }, []);
 
   return (
     <>
@@ -18,9 +21,9 @@ function DefaultPage() {
         <Reminder
           renderFormLogin={() => setShowLogin(true)}
           renderFormRegister={() => setShowRegister(true)}
+          setShowReminder={() => setShowReminder(false)}
         />
       )}
-      <NavbarComponent></NavbarComponent>
       <BannerSection></BannerSection>
       <MidSection></MidSection>
       {showRegister && (

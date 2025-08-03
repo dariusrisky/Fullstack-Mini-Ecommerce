@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "../lib/axios";
 import formaterPrice from "../lib/formaterPrice";
 import OtherProduct from "../components/otherProduct";
-import NavbarComponent from "../components/NavbarComponent";
+import CheckoutOrder from "../components/CheckoutOrder";
 
 function ProductPage() {
+  const [Checkout, setCheckout] = useState(false);
   const [products, setProducts] = useState([]);
   const param = useParams();
 
@@ -24,7 +25,6 @@ function ProductPage() {
   const formatted = formaterPrice(products.price);
   return (
     <>
-      <NavbarComponent></NavbarComponent>
       <div className="container mx-auto p-4 md:p-8">
         <div className="bg-white p-6 shadow-purple-300 rounded-xl shadow-lg">
           <div className="flex flex-col md:flex-row gap-8">
@@ -55,9 +55,10 @@ function ProductPage() {
                   <p className="text-red-500 font-semibold">Stock habis</p>
                 )}
               </div>
-              <button className="w-full md:w-auto mt-6 bg-purple-800 text-white font-bold py-3 px-8 rounded-lg hover:bg-purple-500 transition-colors duration-300">
+              <button onClick={() => setCheckout(true)} className="w-full md:w-auto mt-6 bg-purple-800 text-white font-bold py-3 px-8 rounded-lg hover:bg-purple-500 transition-colors duration-300">
                 CHECKOUT
               </button>
+              {Checkout && <CheckoutOrder products={products} idproduct={param.productid} pmClose={() => setCheckout(false)} />}
             </div>
           </div>
         </div>
@@ -69,8 +70,8 @@ function ProductPage() {
 
           <div className="flex items-start space-x-4 overflow-x-auto pb-4">
             <div className="text-center flex-shrink-0 w-28 md:w-32">
-              <a
-                href="#"
+              <Link
+                to={`/toko/${products.toko?.id}`}
                 className="block border-2  border-purple-400 shadow-sm shadow-purple-200 rounded-xl p-2 hover:border-gray-400"
               >
                 <img
@@ -78,9 +79,9 @@ function ProductPage() {
                   alt={products.toko?.productImagePath}
                   className="w-full h-auto aspect-square rounded-lg object-cover"
                 ></img>
-              </a>
+              </Link>
               <p className="mt-2 text-sm font-semibold text-gray-700">
-                {products.toko?.id}
+                {products.toko?.name}
               </p>
             </div>
 

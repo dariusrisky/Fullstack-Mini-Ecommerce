@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios, { setAccessToken } from "../../lib/axios";
+import axios from "../../lib/axios";
 
 export default function FormLogin({ renderForm }) {
   const [Loading, setLoading] = useState(false);
@@ -35,13 +35,10 @@ export default function FormLogin({ renderForm }) {
       const response = await axios.post("/auth/login", payload, {
         withCredentials: true,
       });
-
-      console.log("Respon dari server:", response.data.user.accessToken);
-      setAccessToken(response.data.user.accessToken);
       setSuccess("login berhasil!");
+      sessionStorage.setItem('isLogin', true)
       window.location.href = "/";
     } catch (err) {
-      console.error("Error saat registrasi:", err);
       if (err.response && err.response.data && err.response.data.msg) {
         setError(err.response.data.msg);
       } else {
