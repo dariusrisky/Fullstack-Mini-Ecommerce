@@ -45,13 +45,6 @@ async function authMiddlewareUser(req, res, next) {
 async function authMiddlewareToko(req, res, next) {
   try {
     const getToken = req.headers.authorization;
-
-    if (!getToken || !getToken.startsWith("Bearer ")) {
-      return res
-        .status(401)
-        .json({ msg: "Authentication failed: No token provided or malformed header." });
-    }
-    
     let token = getToken.split(" ")[1];
 
     if (!token) {

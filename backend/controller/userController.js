@@ -12,7 +12,7 @@ const getUser = async (req, res) => {
   const user = await prisma.user.findUnique({
     where: { id: req.user.id },
   });
-  res.status(200).json({ user: user, role: user.role });
+  res.status(200).json({ user: user, role : user.role });
 };
 
 const registerAccount = async (req, res) => {
@@ -95,14 +95,8 @@ const loginAccount = async (req, res) => {
     });
 
     res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: true,
+    httpOnly: true,
+    secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -185,78 +179,52 @@ const getNewAccessToken = async (req, res) => {
   }
 };
 
-const editProfileUser = async (req, res) => {
-  const dataToUpdate = {};
+const editProfileUser = (req, res) => {
+  if (req.files === null)
+    return res.status(400).json({ msg: "No File Uploaded" });
 
-  if (req.body.name !== undefined) {
-    dataToUpdate.name = req.body.name;
-  }
+  const file = req.files.file;
+  const fileSize = file.data.length;
+  const ext = path.extname(file.name);
+  const fileName = file.md5 + ext;
+  const url = `${req.protocol}://${req.get("host")}/image/user/${fileName}`;
+  const allowedType = [".png", ".jpg", ".jpeg"];
 
-  if (req.files && req.files.file) {
-    const file = req.files.file;
-    const fileSize = file.data.length;
-    const ext = path.extname(file.name);
-    const fileName = file.md5 + ext;
-    const url = `${req.protocol}://${req.get("host")}/image/user/${fileName}`;
-    const allowedType = [".png", ".jpg", ".jpeg"];
+  if (!allowedType.includes(ext.toLowerCase()))
+    return res.status(422).json({ msg: "Invalid Images" });
+  if (fileSize > 5000000)
+    return res.status(422).json({ msg: "Image must be less than 5 MB" });
 
-    if (!allowedType.includes(ext.toLowerCase()))
-      return res.status(422).json({ msg: "Tipe gambar tidak valid" });
-    if (fileSize > 5000000)
-      return res.status(422).json({ msg: "Gambar harus kurang dari 5 MB" });
+  file.mv(`./public/image/user/${fileName}`, async err => {
+    if (err) return res.status(500).json({ msg: err.message });
 
     try {
-      await file.mv(`./public/image/user/${fileName}`);
-      dataToUpdate.profileImagePath = fileName;
-      dataToUpdate.profileImageURL = url;
-    } catch (err) {
-      console.error("Gagal memindahkan file:", err);
-      return res.status(500).json({ msg: err.message });
+      const { password, password_confirm } = req.body;
+      if (!password || !password_confirm)
+        return res.status(400).json({ msg: "Semua kolom wajib di isi" });
+      if (password != password_confirm)
+        return res.status(402).json({ msg: "password harus sama." });
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const editProfileUser = await prisma.user.update({
+        where: { id: req.user.id },
+        data: {
+          name: req.body.name,
+          password: hashedPassword,
+          profileImagePath: fileName,
+          profileImageURL: url,
+        },
+      });
+      return res.status(200).json({
+        msg: "berhasil mengubah profile.",
+        data: editProfileUser,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ msg: "Internal server error." });
     }
-  }
-
-  try {
-    const updatedUser = await prisma.user.update({
-      where: { id: req.user.id },
-      data: {
-        ...dataToUpdate,
-        role: req.body.role,
-      },
-    });
-    return res.status(200).json({
-      msg: "Profil berhasil diubah.",
-      data: updatedUser,
-    });
-  } catch (error) {
-    console.log("Gagal update database:", error);
-    return res.status(500).json({ msg: "Internal server error." });
-  }
-};
-
-const editPassword = async (req, res) => {
-  const { password, password_confirm } = req.body;
-
-  if (!password || !password_confirm) {
-    return res.status(400).json({ msg: "All fields are required." });
-  }
-
-  if (password != password_confirm) {
-    return res.status(401).json({ msg: "password harus sama." });
-  }
-
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await prisma.user.update({
-      where: { id: req.user.id },
-      data: {
-        password: hashedPassword,
-      },
-    });
-    return res.status(200).json({ msg: "berhasil mengubah password." });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ msg: "Internal server error." });
-  }
+  });
 };
 
 module.exports = {
@@ -265,6 +233,5 @@ module.exports = {
   logoutAccount,
   editProfileUser,
   getNewAccessToken,
-  editPassword,
   getUser,
 };

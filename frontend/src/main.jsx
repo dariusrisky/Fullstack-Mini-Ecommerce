@@ -12,10 +12,6 @@ import App from "./App.jsx";
 import ProductPage from "./page/ProductPage.jsx";
 import "./index.css";
 import ProfilePage from "./page/ProfilePage.jsx";
-import TokoPage from "./page/TokoPage.jsx";
-import ResultSearchPage from "./page/ResultSearchPage.jsx";
-import TokoAdminPage from "./page/TokoAdminPage.jsx";
-import ErrorPage from "./page/errorPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,10 +19,6 @@ const router = createBrowserRouter(
       <Route path="/" element={<DefaultPage />} />
       <Route path="/buy/product/:productid" element={<ProductPage />} />
       <Route path="/user/profile" element={<ProfilePage />} />
-      <Route path="/toko/:id" element={<TokoPage />} />
-      <Route path="/search" element={<ResultSearchPage />} />
-      <Route path="/dashboard" element={<TokoAdminPage />} />
-      <Route path="*" element={<ErrorPage />} />
     </Route>
   )
 );

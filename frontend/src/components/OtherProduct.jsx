@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { apiClient } from "../lib/axiosIntercept";
+import generateAccess from "../lib/generateAccess";
 
 export default function OtherProduct({ tokoid }) {
   const [error, setError] = useState("");
@@ -8,7 +8,11 @@ export default function OtherProduct({ tokoid }) {
 
   useEffect(() => {
     const r = async () => {
-      const response = await apiClient.get(`/product/toko/${tokoid}`);
+      const response = await generateAccess(
+        "get",
+        `/product/toko/${tokoid}`,
+        setError
+      );
       setProducts(response.data);
     };
     r();

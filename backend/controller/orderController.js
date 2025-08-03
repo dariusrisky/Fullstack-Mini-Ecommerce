@@ -5,7 +5,7 @@ const createOrder = async (req, res) => {
   const user = req.user;
   const { items, payment } = req.body;
 
-  if (!Array.isArray(items))
+  if (!Array.isArray(items) || items.length === 0)
     return res.status(400).json({ msg: "Items required." });
 
   try {
@@ -132,7 +132,7 @@ const buyOrder = async (req, res) => {
 };
 
 // const viewOrderToko = async (req, res) => {
-//   const
+//   const 
 // };
 
 module.exports = { createOrder, viewOrder, cancelOrder, buyOrder };

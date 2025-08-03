@@ -3,9 +3,8 @@ const path = require("path");
 const fs = require("fs");
 const { prisma } = require("./utils/prismaClient");
 
-
 const createProduct = (req, res) => {
-  const { name, price, description, stock, categoryId } = req.body;
+  const { name, price, description, stock, categoriId } = req.body;
 
   const user = req.user;
 
@@ -24,14 +23,11 @@ const createProduct = (req, res) => {
   if (fileSize > 5000000)
     return res.status(422).json({ msg: "Image must be less than 5 MB" });
 
-  if (!name) return res.status(400).json({ msg: "Name is required." });
-  if (!price) return res.status(400).json({ msg: "Price is required." });
-  if (!stock) return res.status(400).json({ msg: "Stock is required." });
-  if (!description) return res.status(400).json({ msg: "Description is required." });
-  if (!categoryId) return res.status(400).json({ msg: "Category is required." });
+  if (!name || !price || !description || !stock || !categoriId)
+    return res.status(400).json({ msg: "All fields are required." });
 
   file.mv(`./public/image/product/${fileName}`, async err => {
-    if (err) return res.status(502).json({ msg: err.message });
+    if (err) return res.status(500).json({ msg: err.message });
     try {
       const product = await prisma.product.create({
         data: {
@@ -42,7 +38,7 @@ const createProduct = (req, res) => {
           productImageURL: url,
           description: description,
           tokoId: user.id,
-          categoryId: categoryId,
+          categoryId: categoriId,
         },
         include: {
           category: {
@@ -79,7 +75,7 @@ const editProduct = async (req, res) => {
   const id = req.params.id;
 
   const product = await prisma.product.findUnique({
-    where: { id: id, tokoId: user.id, status: status.ON },
+    where: { id: id, tokoId: user.id, status: status.on },
   });
 
   let fileName = product.productImagePath;
@@ -133,25 +129,6 @@ const viewProductperToko = async (req, res) => {
   try {
     const product = await prisma.product.findMany({
       where: { tokoId: params, status: status.ON },
-      select: {
-        toko: {
-          select: {
-            name: true,
-          },
-        },
-        id: true,
-        name: true,
-        description: true,
-        price: true,
-        stock: true,
-        productImagePath: true,
-        productImageURL: true,
-        category: {
-          select: {
-            name: true,
-          },
-        },
-      },
     });
     return res.status(200).json(product);
   } catch (error) {
@@ -196,7 +173,6 @@ const getProduct = async (req, res) => {
       select: {
         toko: {
           select: {
-            id: true,
             name: true,
           },
         },
@@ -301,73 +277,6 @@ const getProductbyID = async (req, res) => {
   }
 };
 
-const getInfoToko = async (req, res) => {
-  try {
-    const toko = await prisma.user.findUnique({
-      where: { id: req.params.id },
-    });
-    return res.status(200).json({
-      data: toko,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(501).json({ msg: "Internal server error" });
-  }
-};
-
-const SearchProduk = async (req, res) => {
-  const { q: keyword } = req.query;
-
-  console.log("Menerima keyword pencarian:", keyword);
-
-  if (!keyword) {
-    return res
-      .status(400)
-      .json({ msg: "Kata kunci pencarian (q) diperlukan." });
-  }
-
-  try {
-    const products = await prisma.product.findMany({
-      where: {
-        status: "ON",
-
-        OR: [
-          {
-            name: {
-              contains: keyword,
-              mode: "insensitive",
-            },
-          },
-          {
-            description: {
-              contains: keyword,
-              mode: "insensitive",
-            },
-          },
-        ],
-      },
-      include : {
-        toko: {
-          select: {
-            name: true,
-          },
-        }
-      }
-    });
-
-    if (products.length === 0) {
-      return res.status(404).json({ msg: "Produk tidak ditemukan.", data: [] });
-    }
-
-    return res
-      .status(200)
-      .json({ msg: "Produk berhasil ditemukan.", data: products });
-  } catch (error) {
-    console.error("Error saat mencari produk:", error);
-    return res.status(500).json({ msg: "Terjadi kesalahan pada server." });
-  }
-};
-
 module.exports = {
   createProduct,
   editProduct,
@@ -376,6 +285,4 @@ module.exports = {
   getProduct,
   getOrderProduct,
   getProductbyID,
-  getInfoToko,
-  SearchProduk,
 };

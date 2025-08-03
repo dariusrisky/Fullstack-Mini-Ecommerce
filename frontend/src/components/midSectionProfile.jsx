@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { apiClient } from "../lib/axiosIntercept";
-import { Link } from "react-router-dom";
+import { axiosInstance, setAccessToken } from "../lib/axios";
+import generateAccess from "../lib/generateAccess";
 
 export default function MidSectionProfile() {
   const [data, setData] = useState([]);
@@ -8,7 +8,7 @@ export default function MidSectionProfile() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apiClient.get("/get/profile");
+      const response = await generateAccess("get", "/get/profile", setError);
       setData(response.data.user);
     };
 
@@ -27,9 +27,9 @@ export default function MidSectionProfile() {
             {data.name}
           </h3>
           {data.role === "TOKO" ? (
-            <Link to="/dashboard" className="mt-4 w-full bg-gray-800 text-white font-semibold py-2 rounded-lg hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800">
+            <button className="mt-4 w-full bg-gray-800 text-white font-semibold py-2 rounded-lg hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800">
               KELOLA TOKO
-            </Link>
+            </button>
           ) : (
             <div></div>
           )}
