@@ -1,13 +1,14 @@
-import React from 'react'
-import InformationProfile from '../components/InformationProfile'
-import NavbarComponent from '../components/NavbarComponent'
+import React, { useEffect, useState } from 'react'
+import Profile from '../components/Profile'
+import ProfileMain from '../components/ProfileMain'
+
 
 
 function ProfilePage() {
+  
   return (
     <div>
-      <NavbarComponent></NavbarComponent>
-      <InformationProfile></InformationProfile>
+      <Profile ></Profile>
     </div>
   )
 }

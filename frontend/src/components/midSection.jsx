@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axios, { axiosInstance } from "../lib/axios";
+import axios from "../lib/axios";
 import MidSectionProfile from "./midSectionProfile";
-import generateAccess from "../lib/generateAccess";
+import { Link } from "react-router-dom";
 
 export default function MidSection() {
   const [category, setCategory] = useState([]);
@@ -10,10 +10,7 @@ export default function MidSection() {
   const [role, setRole] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await generateAccess("get", "/get/profile", setError);
-      setRole(response.data.user.role);
-    };
+    
     const fetchCategory = async () => {
 
       try {
@@ -28,7 +25,6 @@ export default function MidSection() {
       }
     };
 
-    fetchData()
     fetchCategory();
     setLoading(false);
   }, []);
@@ -67,11 +63,11 @@ export default function MidSection() {
               </span>
             </div>
 
-            <div className="space-y-4">
+            <Link to={`/user/profile/`} className="space-y-4">
               <button className="w-full bg-purple-800 text-white font-bold py-3 px-4 rounded-lg hover:bg-purple-600 transition-colors">
                 Riwayat Belanja
               </button>
-            </div>
+            </Link>
           </div>
         </div>
 

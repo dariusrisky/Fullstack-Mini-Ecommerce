@@ -67,6 +67,7 @@ model product {
   orders           order[]
   category         category   @relation(fields: [categoryId], references: [id])
   toko             user       @relation(fields: [tokoId], references: [id])
+
 }
 
 model order {
