@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
 
 const corsOptions = {
-  origin: `${process.env.FRONTEND_URL}`,
+  origin: `http://localhost:5173`,
   credentials: true,
 };
 
