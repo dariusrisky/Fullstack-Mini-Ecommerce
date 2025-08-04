@@ -33,8 +33,6 @@ async function authMiddlewareUser(req, res, next) {
 
     req.user = user;
 
-    // return res.status(200).json(jwtVerify);
-
     next();
   } catch (error) {
     console.log(error);
@@ -47,11 +45,11 @@ async function authMiddlewareToko(req, res, next) {
     const getToken = req.headers.authorization;
 
     if (!getToken || !getToken.startsWith("Bearer ")) {
-      return res
-        .status(401)
-        .json({ msg: "Authentication failed: No token provided or malformed header." });
+      return res.status(401).json({
+        msg: "Authentication failed: No token provided or malformed header.",
+      });
     }
-    
+
     let token = getToken.split(" ")[1];
 
     if (!token) {
@@ -71,7 +69,6 @@ async function authMiddlewareToko(req, res, next) {
 
     req.user = user;
 
-    // return res.status(200).json({ msg: "Store user verified successfully." });
     next();
   } catch (error) {
     console.error("Error in storeChecker middleware:", error);
