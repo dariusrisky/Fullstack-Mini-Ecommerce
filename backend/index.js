@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
 
 const corsOptions = {
-  origin: `http://localhost:5173`,
+  origin: `${process.env.FRONTEND_URL}`,
   credentials: true,
 };
 
@@ -23,7 +23,7 @@ app.listen(PORT, () => {
 });
 
 app.get("/", (req, res) => {
-  res.json("Hello World!");
+  res.json("ITS WORK!");
 });
 
 const apiRoutes = require("./routes/apiRoutes");
