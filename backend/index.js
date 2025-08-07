@@ -43,3 +43,4 @@ const apiRoutes = require("./routes/apiRoutes");
 app.use("/api/v1", apiRoutes);
 
 module.exports = app;
+
