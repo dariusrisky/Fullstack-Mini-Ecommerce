@@ -4,22 +4,18 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// console.log(process.env.VITE_API_URL);
-
-
 export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
       "/api": {
-        target: `http://localhost:3000`,
         target: `${process.env.VITE_API_URL}`,
         changeOrigin: true,
         secure: false,
       },
     },
   },
-  define : {
-    'process.env.VITE_API_URL':JSON.stringify(process.env.VITE_API_URL)
-  }
+  define: {
+    "process.env.VITE_API_URL": JSON.stringify(process.env.VITE_API_URL),
+  },
 });
