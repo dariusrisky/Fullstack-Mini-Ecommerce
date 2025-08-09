@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://api-kamu.vercel.app/api/:path*"
+      "destination": "https://fullstack-mini-ecommerce.vercel.app/api/:path*"
     }
   ]
 }
