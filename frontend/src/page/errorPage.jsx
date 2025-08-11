@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Gunakan Link dari react-router-dom untuk navigasi
+import { Link } from 'react-router-dom';
 
-// Contoh SVG untuk ilustrasi, Anda bisa menggantinya dengan gambar atau SVG lain
 const ErrorIllustration = () => (
   <svg
     className="w-48 h-48 sm:w-64 sm:h-64 text-red-400"
@@ -32,7 +31,7 @@ export default function ErrorPage() {
         <h2 className="text-3xl font-bold text-gray-800 mb-4">mohon coba lagi secara berkala</h2>
         
         <Link
-          to={homePath}
+          to={"/"}
           className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300"
         >
           Kembali ke Beranda
