@@ -2,11 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import formaterPrice from "../../lib/formaterPrice";
 
-export default function CardProduct({ item }) {
+export default function CardProduct({ item, onRemove, onEdit }) {
   const formatted = formaterPrice(item.price);
 
   return (
-    <>
+    <div >
       <Link
         key={item.id}
         className=" rounded-lg overflow-hidden shadow-lg bg-white "
@@ -35,14 +35,31 @@ export default function CardProduct({ item }) {
             >
               <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
             </svg>
-            <Link to={`/toko/${item.toko?.id }`}>
+            <Link to={`/toko/${item.toko?.id}`}>
               <span className="text-sm text-gray-600 font-semibold">
                 {item.toko?.name}
               </span>
             </Link>
           </div>
+          {/* returnnya */}
         </div>
       </Link>
-    </>
+      {onRemove && onEdit && (
+        <div className="grid grid-cols-2 cursor-pointer">
+          <input
+            type="button"
+            value="Remove"
+            onClick={onRemove}
+            className="bg-red-500 text-white p-2"
+          />
+          <input
+            onClick={onEdit}
+            type="button"
+            value="Edit"
+            className="bg-green-500 text-white p-2"
+          />
+        </div>
+      )}
+    </div>
   );
 }

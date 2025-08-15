@@ -25,7 +25,7 @@ const router = createBrowserRouter(
       <Route path="/user/profile" element={<ProfilePage />} />
       <Route path="/toko/:id" element={<TokoPage />} />
       <Route path="/search" element={<ResultSearchPage />} />
-      <Route path="/dashboard" element={<TokoAdminPage />} />
+      <Route path="/dashboard/:id" element={<TokoAdminPage />} />
       <Route path="*" element={<ErrorPage />} />
     </Route>
   )

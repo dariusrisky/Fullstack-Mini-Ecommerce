@@ -27,7 +27,7 @@ export default function MidSectionProfile() {
             {data.name}
           </h3>
           {data.role === "TOKO" ? (
-            <Link to="/dashboard" className="mt-4 w-full bg-gray-800 text-white font-semibold py-2 rounded-lg hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800">
+            <Link to={`/dashboard/${data.id}`} className="mt-4 w-full bg-gray-800 text-white font-semibold py-2 rounded-lg hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800">
               KELOLA TOKO
             </Link>
           ) : (

@@ -1,16 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardProduct from "../components/card/CardProduct";
 import CreateProduct from "../components/form/createProduct";
+import axios from "../lib/axios";
+import { useParams } from "react-router-dom";
 
 function TokoAdminPage() {
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [item, setItem] = useState([]);
+
+  const param = useParams();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await axios.get(`/product/toko/${param.id}`);
+        console.log(data.data);
+        setItem(data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [item]);
+
+  const editHandling = (id) => {
+    console.log('id');
+  };
+
+  const removeHandling = (id) => {
+    console.log('id');
+  };
 
   return (
     <div>
       <header class="bg-white shadow-md">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
           <h1 class="text-2xl font-bold text-gray-800">
-            Dashboard Produk {"toko.name"}
+            Dashboard Produk
           </h1>
           <button
             id="createNewBtn"
@@ -27,9 +53,11 @@ function TokoAdminPage() {
       <main class="container mx-auto p-6">
         <div
           id="card-grid"
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6"
         >
-          {/* <CardProduct item={item}></CardProduct> */}
+          {item.map(item => (
+            <CardProduct key={item.id} item={item} onEdit={editHandling} onRemove={removeHandling}></CardProduct>
+          ))}
         </div>
       </main>
     </div>
