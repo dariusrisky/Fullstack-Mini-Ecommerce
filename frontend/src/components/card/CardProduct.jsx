@@ -5,6 +5,8 @@ import formaterPrice from "../../lib/formaterPrice";
 export default function CardProduct({ item, onRemove, onEdit }) {
   const formatted = formaterPrice(item.price);
 
+  console.log(item);
+  
   return (
     <div >
       <Link
@@ -14,7 +16,7 @@ export default function CardProduct({ item, onRemove, onEdit }) {
       >
         <img
           className="w-full h-48 object-fill"
-          src={item.productImageURL}
+          src={item.productImageURL ? item.productImageURL : "http://localhost:3000/image/default/default_product.png"}
           alt={item.name}
         />
 
@@ -41,7 +43,6 @@ export default function CardProduct({ item, onRemove, onEdit }) {
               </span>
             </Link>
           </div>
-          {/* returnnya */}
         </div>
       </Link>
       {onRemove && onEdit && (
@@ -49,7 +50,7 @@ export default function CardProduct({ item, onRemove, onEdit }) {
           <input
             type="button"
             value="Remove"
-            onClick={onRemove}
+            onClick={() => onRemove(item.id)}
             className="bg-red-500 text-white p-2"
           />
           <input
