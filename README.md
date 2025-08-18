@@ -2,7 +2,7 @@
 # Simple My Ecommerce Project 
 
 
-![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
+![Logo](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9k7fYauqqOvNRWLADNndcdMoYRdcSix660g&s)
 
 
 ## Tech Stack
