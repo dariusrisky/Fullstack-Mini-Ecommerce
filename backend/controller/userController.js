@@ -6,7 +6,8 @@ const bcrypt = require("bcrypt");
 const { generateAccessToken, generateRefreshToken } = require("./utils/jwt");
 
 const defaultProfile =
-  `${process.env.DOMAIN}/public/image/default/default_profile.webp`;
+  // `http://localhost:3000/public/image/default/default_profile.webp`;
+  `https://simple-comerce.vercel.app/public/image/default/default_profile.webp`;
 
 const getUser = async (req, res) => {
   const user = await prisma.user.findUnique({
