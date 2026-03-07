@@ -198,11 +198,11 @@ const editProfileUser = async (req, res) => {
     const ext = path.extname(file.name);
     const fileName = file.md5 + ext;
     const url = `${req.protocol}://${req.get("host")}/image/user/${fileName}`;
-    const allowedType = [".png", ".jpg", ".jpeg"];
+    const allowedType = [".png", ".jpg", ".jpeg", "webp"];
 
     if (!allowedType.includes(ext.toLowerCase()))
       return res.status(422).json({ msg: "Tipe gambar tidak valid" });
-    if (fileSize > 5000000)
+    if (fileSize > 2000000)
       return res.status(422).json({ msg: "Gambar harus kurang dari 5 MB" });
 
     try {
