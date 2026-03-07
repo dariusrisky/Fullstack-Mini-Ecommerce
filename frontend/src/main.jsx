@@ -16,7 +16,7 @@ import TokoPage from "./page/TokoPage.jsx";
 import ResultSearchPage from "./page/ResultSearchPage.jsx";
 import TokoAdminPage from "./page/TokoAdminPage.jsx";
 import ErrorPage from "./page/errorPage.jsx";
-import Dashboard from "./components/dashboard.jsx";
+import Dashboard from "./components/Dashboard.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

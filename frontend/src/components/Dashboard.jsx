@@ -4,7 +4,7 @@ import CreateProduct from "../components/form/createProduct";
 import axios from "../lib/axios";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { apiClient } from "../lib/axiosIntercept";
-import UpdateProduct from "./form/updateProduct";
+import UpdateProduct from "./form/UpdateProduct";
 
 
 export default function Dashboard() {

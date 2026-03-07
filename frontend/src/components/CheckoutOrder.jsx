@@ -21,7 +21,7 @@ export default function CheckoutOrder({ onClose, idproduct, products }) {
     const res = await apiClient.post("/order/product/item", {
       items: [{ productId: idproduct, quantity: quantity }],
     });
-    console.log(res.data);
+    // console.log(res.data);
     setSuccess("Pesanan berhasil dibuat.");
     onClose();
 

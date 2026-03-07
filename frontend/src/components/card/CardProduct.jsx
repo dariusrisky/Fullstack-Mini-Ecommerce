@@ -5,10 +5,8 @@ import formaterPrice from "../../lib/formaterPrice";
 export default function CardProduct({ item, onRemove, onEdit }) {
   const formatted = formaterPrice(item.price);
 
-  console.log(item);
-  
   return (
-    <div >
+    <div>
       <Link
         key={item.id}
         className=" rounded-lg overflow-hidden shadow-lg bg-white "
@@ -16,7 +14,11 @@ export default function CardProduct({ item, onRemove, onEdit }) {
       >
         <img
           className="w-full h-48 object-fill"
-          src={item.productImageURL ? item.productImageURL : "http://localhost:3000/image/default/default_product.png"}
+          src={
+            item.productImageURL
+              ? item.productImageURL
+              : "http://localhost:3000/image/default/default_product.png"
+          }
           alt={item.name}
         />
 

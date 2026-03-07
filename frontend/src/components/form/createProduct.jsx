@@ -135,7 +135,7 @@ export default function CreateProduct({ onClose }) {
                   <input
                     type="text"
                     name="name"
-                    id="name"
+                    id="productName"
                     value={formData.productName}
                     onChange={handleChange}
                     className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
@@ -172,8 +172,8 @@ export default function CreateProduct({ onClose }) {
                     Deskripsi Produk
                   </label>
                   <textarea
-                    name="description"
-                    id="description"
+                    name="productDescription"
+                    id="productDescription"
                     rows="6"
                     value={formData.productDescription}
                     onChange={handleChange}
@@ -191,7 +191,7 @@ export default function CreateProduct({ onClose }) {
                     <input
                       type="number"
                       name="price"
-                      id="price"
+                      id="productPrice"
                       value={formData.price}
                       onChange={handleChange}
                       className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
@@ -210,7 +210,7 @@ export default function CreateProduct({ onClose }) {
                     <input
                       type="number"
                       name="stock"
-                      id="stock"
+                      id="productStock"
                       value={formData.stock}
                       onChange={handleChange}
                       className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
