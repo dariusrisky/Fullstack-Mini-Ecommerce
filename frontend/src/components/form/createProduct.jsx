@@ -4,7 +4,7 @@ import axios from "../../lib/axios";
 
 export default function CreateProduct({ onClose }) {
   const [imagePreview, setImagePreview] = useState(
-    "http://localhost:3000/image/default/default_product.webp"
+    `${process.env.VITE_API_URL}/image/default/default_product.webp`
   );
   const [formData, setFormData] = useState({
     productName: "",
@@ -14,7 +14,7 @@ export default function CreateProduct({ onClose }) {
     productStock: "",
   });
   const [productImage, setProductImage] = useState(
-    "http://localhost:3000/image/default/default_product.webp"
+    `${process.env.VITE_API_URL}/image/default/default_product.webp`
   );
   const [categories, setCategories] = useState([]);
 

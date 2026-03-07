@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const { generateAccessToken, generateRefreshToken } = require("./utils/jwt");
 
 const defaultProfile =
-  "http://localhost:3000/image/default/default_profile.webp";
+  `${process.env.DOMAIN}/image/default/default_profile.webp`;
 
 const getUser = async (req, res) => {
   const user = await prisma.user.findUnique({
