@@ -38,7 +38,9 @@ const viewCategories = async (req, res) => {
     console.error("Error retrieving categories:", error);
     res
       .status(500)
-      .json({ error: "An error occurred while retrieving categories." });
+      .json({ error: "An error occurred while retrieving categories.",
+        rtr : error
+      });
   }
 };
 

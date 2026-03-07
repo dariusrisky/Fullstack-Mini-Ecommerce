@@ -17,7 +17,7 @@ export default function CardProduct({ item, onRemove, onEdit }) {
           src={
             item.productImageURL
               ? item.productImageURL
-              : "http://localhost:3000/image/default/default_product.png"
+              : "http://localhost:3000/image/default/default_product.webp"
           }
           alt={item.name}
         />

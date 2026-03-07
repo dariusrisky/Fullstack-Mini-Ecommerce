@@ -1,7 +1,7 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
-import banner1 from "../assets/banner/banner1.png";
-import banner2 from "../assets/banner/banner2.png";
+import banner1 from "../assets/banner/banner1.webp";
+import banner2 from "../assets/banner/banner2.webp";
 import "react-multi-carousel/lib/styles.css";
 
 export default function BannerSection() {
