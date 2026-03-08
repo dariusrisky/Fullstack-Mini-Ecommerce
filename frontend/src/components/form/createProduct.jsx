@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { apiClient } from "../../lib/axiosIntercept";
 import axios from "../../lib/axios";
 
-export default function CreateProduct({ onClose }) {
+export default function CreateProduct({ onClose, onProductCreated }) {
   const [imagePreview, setImagePreview] = useState(
     `${process.env.VITE_API_URL}/image/default/default_product.webp`
   );
@@ -52,8 +52,13 @@ export default function CreateProduct({ onClose }) {
     dataToSend.append("name", formData.productName);
     dataToSend.append("categoryId", formData.productCategory);
     dataToSend.append("description", formData.productDescription);
-    dataToSend.append("price", formData.productPrice);
-    dataToSend.append("stock", formData.productStock);
+    
+    const price = parseInt(formData.productPrice, 10);
+    const stock = parseInt(formData.productStock, 10);
+
+    dataToSend.append("price", isNaN(price) ? 0 : price);
+    dataToSend.append("stock", isNaN(stock) ? 0 : stock);
+    
     if (productImage) {
       dataToSend.append("file", productImage);
     }
@@ -70,6 +75,7 @@ export default function CreateProduct({ onClose }) {
         },
       });
       console.log("Data berhasil dikirim ke API:", response.data);
+      onProductCreated();
       onClose();
     } catch (error) {
       console.error("Gagal mengirim data ke API:", error);

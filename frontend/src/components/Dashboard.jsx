@@ -2,52 +2,49 @@ import React, { useEffect, useState } from "react";
 import CardProduct from "../components/card/CardProduct";
 import CreateProduct from "../components/form/createProduct";
 import axios from "../lib/axios";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { apiClient } from "../lib/axiosIntercept";
 import UpdateProduct from "./form/UpdateProduct";
 
 
 export default function Dashboard() {
-  const [showEditForm, setShowEditForm] = useState(false);
+  const [productToEdit, setProductToEdit] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
   const [item, setItem] = useState([]);
 
   const param = useParams();
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    const fetchData = async () => {
-      try {
-        const data = await axios.get(`/product/toko/${param.id}`, {
-          signal: controller.signal,
-        });
-        setItem(data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-    return () => {
-      controller.abort();
-    };
-  }, [param.id]);
-
-  const editHandling = (id) => {
-    setShowEditForm(true);
-
+  const fetchData = async () => {
+    try {
+      const { data } = await axios.get(`/product/toko/${param.id}`);
+      setItem(data || []);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const removeHandling = (id) => {
+  useEffect(() => {
+    fetchData();
+  }, [param.id]);
+
+  const editHandling = (product) => {
+    setProductToEdit(product);
+    setShowEditForm(true);
+  };
+
+  const removeHandling = async (id) => {
     try {
-      apiClient.put(`/product/remove/${id}`);
+      await apiClient.put(`/product/remove/${id}`);
+      fetchData(); // Refresh the product list
     } catch (error) {
       console.log("Error removing product:", error);
       
     }
+  };
 
+  const handleProductCreated = () => {
+    fetchData();
   };
 
   return (
@@ -68,10 +65,14 @@ export default function Dashboard() {
           </div>
         </header>
         {showCreateForm && (
-          <CreateProduct onClose={() => setShowCreateForm(false)} />
+          <CreateProduct onClose={() => setShowCreateForm(false)} onProductCreated={handleProductCreated} />
         )}
-        {showEditForm && (
-          <UpdateProduct  onClose={() => setShowEditForm(false)} />
+        {showEditForm && productToEdit && (
+          <UpdateProduct  
+            onClose={() => setShowEditForm(false)} 
+            onProductUpdated={fetchData} 
+            product={productToEdit} 
+          />
         )}
         <main className="container mx-auto p-6">
           <div
@@ -82,7 +83,7 @@ export default function Dashboard() {
               <CardProduct
                 key={item.id}
                 item={item}
-                onEdit={editHandling}
+                onEdit={() => editHandling(item)}
                 onRemove={removeHandling}
               ></CardProduct>
             ))}

@@ -1,6 +1,88 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { apiClient } from "../../lib/axiosIntercept";
+import axios from "../../lib/axios";
 
-export default function UpdateProduct({ onClose }) {
+export default function UpdateProduct({ onClose, onProductUpdated, product }) {
+  const [imagePreview, setImagePreview] = useState(
+    product.productImageURL
+      ? product.productImageURL
+      : `${process.env.VITE_API_URL}/image/default/default_product.webp`
+  );
+  const [formData, setFormData] = useState({
+    productName: product.name,
+    productCategory: product.categoryId,
+    productDescription: product.description,
+    productPrice: product.price,
+    productStock: product.stock,
+  });
+  const [productImage, setProductImage] = useState(null);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("/view/categories");
+        setCategories(response.data.categories);
+      } catch (error) {
+        console.error("Gagal mengambil data kategori:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+  const handleChange = e => {
+    const { id, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
+  const handleFileChange = e => {
+    if (e.target.files && e.target.files[0]) {
+      setProductImage(e.target.files[0]);
+      setImagePreview(URL.createObjectURL(e.target.files[0]));
+    }
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const stock = parseInt(formData.productStock, 10);
+
+    const dataToSend = new FormData();
+    dataToSend.append("name", formData.productName);
+    dataToSend.append("categoryId", formData.productCategory);
+    dataToSend.append("description", formData.productDescription);
+    dataToSend.append("stock", stock);
+    
+
+
+    if (productImage) {
+      dataToSend.append("file", productImage);
+    }
+
+    console.log("Data yang akan dikirim ke API untuk update:");
+    for (let [key, value] of dataToSend.entries()) {
+      console.log(`${key}:`, value);
+    }
+
+    try {
+      const response = await apiClient.put(
+        `/product/update/${product.id}`,
+        dataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("Data berhasil diperbarui di API:", response.data);
+      onProductUpdated();
+      onClose();
+    } catch (error) {
+      console.error("Gagal memperbarui data di API:", error);
+    }
+  };
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 transition-opacity duration-300"
@@ -22,7 +104,7 @@ export default function UpdateProduct({ onClose }) {
 
         <div className="p-6 max-h-[70vh] overflow-y-auto">
           <form
-            // onSubmit={handleSubmit}
+            onSubmit={handleSubmit}
             className="space-y-6"
           >
             <div className="flex flex-col gap-6 md:flex-row">
@@ -31,7 +113,7 @@ export default function UpdateProduct({ onClose }) {
                   Preview Image
                 </label>
                 <img
-                  // src={product.imageUrl}
+                  src={imagePreview}
                   alt="Product Preview"
                   className="object-cover w-full bg-gray-100 border border-gray-300 rounded-lg aspect-square"
                 />
@@ -46,7 +128,7 @@ export default function UpdateProduct({ onClose }) {
                     id="image-upload"
                     type="file"
                     className="sr-only"
-                    // onChange={handleImageChange}
+                    onChange={handleFileChange}
                     accept="image/*"
                   />
                 </div>
@@ -63,12 +145,34 @@ export default function UpdateProduct({ onClose }) {
                   <input
                     type="text"
                     name="name"
-                    id="name"
-                    // value={product.name}
-                    // onChange={handleChange}
+                    id="productName"
+                    value={formData.productName}
+                    onChange={handleChange}
                     className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required
                   />
+                </div>
+                <div>
+                  <label
+                    htmlFor="productCategory"
+                    className="block text-sm font-semibold text-gray-700 mb-1"
+                  >
+                    Category
+                  </label>
+                  <select
+                    id="productCategory"
+                    value={formData.productCategory}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    required
+                  >
+                    <option value="">Select a category</option>
+                    {categories.map(category => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label
@@ -79,10 +183,10 @@ export default function UpdateProduct({ onClose }) {
                   </label>
                   <textarea
                     name="description"
-                    id="description"
+                    id="productDescription"
                     rows="6"
-                    // value={product.description}
-                    // onChange={handleChange}
+                    value={formData.productDescription}
+                    onChange={handleChange}
                     className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -97,9 +201,9 @@ export default function UpdateProduct({ onClose }) {
                     <input
                       type="number"
                       name="price"
-                      id="price"
-                      // value={product.price}
-                      // onChange={handleChange}
+                      id="productPrice"
+                      value={formData.productPrice}
+                      onChange={handleChange}
                       className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       min="0"
                       required
@@ -116,9 +220,9 @@ export default function UpdateProduct({ onClose }) {
                     <input
                       type="number"
                       name="stock"
-                      id="stock"
-                      // value={product.stock}
-                      // onChange={handleChange}
+                      id="productStock"
+                      value={formData.productStock}
+                      onChange={handleChange}
                       className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       min="0"
                       required
