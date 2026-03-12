@@ -6,7 +6,7 @@ export default function CardProduct({ item, onRemove, onEdit }) {
   const formatted = formaterPrice(item.price);
 
   return (
-    <div>
+    <div className="border p-1 rounded border-purple-300">
       <Link
         key={item.id}
         className=" rounded-lg overflow-hidden shadow-lg bg-white "
@@ -53,13 +53,13 @@ export default function CardProduct({ item, onRemove, onEdit }) {
             type="button"
             value="Remove"
             onClick={() => onRemove(item.id)}
-            className="bg-red-500 text-white p-2"
+            className="bg-red-500 text-white p-2 m-1 rounded"
           />
           <input
             onClick={onEdit}
             type="button"
             value="Edit"
-            className="bg-green-500 text-white p-2"
+            className="bg-green-500 text-white p-2 m-1 rounded"
           />
         </div>
       )}

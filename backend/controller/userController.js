@@ -6,8 +6,8 @@ const bcrypt = require("bcrypt");
 const { generateAccessToken, generateRefreshToken } = require("./utils/jwt");
 
 const defaultProfile =
-  // `http://localhost:3000/image/default/default_profile.webp`;
-  `https://fullstack-mini-ecommerce.vercel.app/image/default/default_profile.webp`;
+  `http://localhost:3000/image/default/default_profile.webp`;
+  // `https://fullstack-mini-ecommerce.vercel.app/image/default/default_profile.webp`;
 
 const getUser = async (req, res) => {
   const user = await prisma.user.findUnique({
@@ -199,7 +199,7 @@ const editProfileUser = async (req, res) => {
     const ext = path.extname(file.name);
     const fileName = file.md5 + ext;
     const url = `${req.protocol}://${req.get("host")}/image/user/${fileName}`;
-    const allowedType = [".png", ".jpg", ".jpeg", "webp"];
+    const allowedType = [".png", ".jpg", "webp"];
 
     if (!allowedType.includes(ext.toLowerCase()))
       return res.status(422).json({ msg: "Tipe gambar tidak valid" });

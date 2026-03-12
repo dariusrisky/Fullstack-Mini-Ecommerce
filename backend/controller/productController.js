@@ -3,7 +3,6 @@ const path = require("path");
 const fs = require("fs");
 const { prisma } = require("./utils/prismaClient");
 
-
 const createProduct = (req, res) => {
   const { name, price, description, stock, categoryId } = req.body;
 
@@ -27,10 +26,10 @@ const createProduct = (req, res) => {
   if (!name) return res.status(400).json({ msg: "Name is required." });
   if (!price) return res.status(400).json({ msg: "Price is required." });
   if (!stock) return res.status(400).json({ msg: "Stock is required." });
-  if (!description) return res.status(400).json({ msg: "Description is required." });
-  if (!categoryId) return res.status(400).json({ msg: "Category is required." });
+  if (!categoryId)
+    return res.status(400).json({ msg: "Category is required." });
 
-  file.mv(`./public/image/product/${fileName}`, async err => {
+  file.mv(`./public/image/product/${fileName}`, async (err) => {
     if (err) return res.status(502).json({ msg: err.message });
     try {
       const product = await prisma.product.create({
@@ -89,7 +88,7 @@ const editProduct = async (req, res) => {
     const fileSize = file.data.length;
     const ext = path.extname(file.name);
     fileName = file.md5 + ext;
-    const allowedType = [".png", ".jpg", ".jpeg"];
+    const allowedType = [".png", ".jpeg", ".webp"];
 
     if (!allowedType.includes(ext.toLowerCase()))
       return res.status(422).json({ msg: "Invalid Images" });
@@ -99,12 +98,12 @@ const editProduct = async (req, res) => {
     const filepath = `./public/image/product/${product.image}`;
     fs.unlinkSync(filepath);
 
-    file.mv(`./public/image/product/${fileName}`, err => {
+    file.mv(`./public/image/product/${fileName}`, (err) => {
       if (err) return res.status(500).json({ msg: err.message });
     });
   }
 
-  const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+  const url = `${req.protocol}://${req.get("host")}/image/product/${fileName}`;
 
   try {
     const editProduct = await prisma.product.update({
@@ -113,7 +112,7 @@ const editProduct = async (req, res) => {
         name: name,
         description: description,
         price: price,
-        stock: stock,
+        stock: parseInt(stock),
         productImageURL: url,
         productImagePath: fileName,
       },
@@ -346,13 +345,13 @@ const SearchProduk = async (req, res) => {
           },
         ],
       },
-      include : {
+      include: {
         toko: {
           select: {
             name: true,
           },
-        }
-      }
+        },
+      },
     });
 
     if (products.length === 0) {

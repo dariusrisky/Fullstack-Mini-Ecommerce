@@ -102,7 +102,7 @@ export default function CreateProduct({ onClose, onProductCreated }) {
         </div>
 
         <div className="p-6 max-h-[70vh] overflow-y-auto">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} method="PUT" className="space-y-6">
             <div className="flex flex-col gap-6 md:flex-row">
               <div className="flex flex-col items-center space-y-3 md:w-1/3">
                 <label className="w-full text-sm font-medium text-gray-700">

@@ -6,7 +6,7 @@ export default function UpdateProduct({ onClose, onProductUpdated, product }) {
   const [imagePreview, setImagePreview] = useState(
     product.productImageURL
       ? product.productImageURL
-      : `${process.env.VITE_API_URL}/image/default/default_product.webp`
+      : `${process.env.VITE_API_URL}/image/default/default_product.webp`,
   );
   const [formData, setFormData] = useState({
     productName: product.name,
@@ -30,32 +30,30 @@ export default function UpdateProduct({ onClose, onProductUpdated, product }) {
 
     fetchCategories();
   }, []);
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { id, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [id]: value,
     }));
   };
 
-  const handleFileChange = e => {
+  const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setProductImage(e.target.files[0]);
       setImagePreview(URL.createObjectURL(e.target.files[0]));
     }
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const stock = parseInt(formData.productStock, 10);
 
     const dataToSend = new FormData();
     dataToSend.append("name", formData.productName);
     dataToSend.append("categoryId", formData.productCategory);
     dataToSend.append("description", formData.productDescription);
-    dataToSend.append("stock", stock);
-    
-
+    dataToSend.append("price", formData.productPrice);
+    dataToSend.append("stock", formData.productStock);
 
     if (productImage) {
       dataToSend.append("file", productImage);
@@ -74,7 +72,7 @@ export default function UpdateProduct({ onClose, onProductUpdated, product }) {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
       console.log("Data berhasil diperbarui di API:", response.data);
       onProductUpdated();
@@ -83,6 +81,7 @@ export default function UpdateProduct({ onClose, onProductUpdated, product }) {
       console.error("Gagal memperbarui data di API:", error);
     }
   };
+  
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 transition-opacity duration-300"
@@ -90,7 +89,7 @@ export default function UpdateProduct({ onClose, onProductUpdated, product }) {
     >
       <div
         className="relative w-full max-w-4xl m-4 bg-white rounded-xl shadow-lg transform transition-transform duration-300"
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-5 border-b border-gray-200">
           <h1 className="text-2xl font-bold text-gray-900">Update Product</h1>
@@ -103,10 +102,7 @@ export default function UpdateProduct({ onClose, onProductUpdated, product }) {
         </div>
 
         <div className="p-6 max-h-[70vh] overflow-y-auto">
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-6"
-          >
+          <form onSubmit={handleSubmit} method="POST" className="space-y-6">
             <div className="flex flex-col gap-6 md:flex-row">
               <div className="flex flex-col items-center space-y-3 md:w-1/3">
                 <label className="w-full text-sm font-medium text-gray-700">
@@ -167,7 +163,7 @@ export default function UpdateProduct({ onClose, onProductUpdated, product }) {
                     required
                   >
                     <option value="">Select a category</option>
-                    {categories.map(category => (
+                    {categories.map((category) => (
                       <option key={category.id} value={category.id}>
                         {category.name}
                       </option>
@@ -224,7 +220,6 @@ export default function UpdateProduct({ onClose, onProductUpdated, product }) {
                       value={formData.productStock}
                       onChange={handleChange}
                       className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                      min="0"
                       required
                     />
                   </div>

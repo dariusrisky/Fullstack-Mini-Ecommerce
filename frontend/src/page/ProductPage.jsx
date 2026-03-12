@@ -55,10 +55,19 @@ function ProductPage() {
                   <p className="text-red-500 font-semibold">Stock habis</p>
                 )}
               </div>
-              <button onClick={() => setCheckout(true)} className="w-full md:w-auto mt-6 bg-purple-800 text-white font-bold py-3 px-8 rounded-lg hover:bg-purple-500 transition-colors duration-300">
+              <button
+                onClick={() => setCheckout(true)}
+                className="w-full md:w-auto mt-6 bg-purple-800 text-white font-bold py-3 px-8 rounded-lg hover:bg-purple-500 transition-colors duration-300"
+              >
                 CHECKOUT
               </button>
-              {Checkout && <CheckoutOrder products={products} idproduct={param.productid} pmClose={() => setCheckout(false)} />}
+              {Checkout && (
+                <CheckoutOrder
+                  products={products}
+                  idproduct={param.productid}
+                  pmClose={() => setCheckout(false)}
+                />
+              )}
             </div>
           </div>
         </div>
